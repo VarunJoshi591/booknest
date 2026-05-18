@@ -1,0 +1,896 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="Logo.png">
+    <title>BookNest - Simple Bookstore</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* Modern, clean, and simple CSS */
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            margin: 0;
+            background: #f4f7f6;
+            color: #333;
+        }
+
+        header {
+            background: #f1f3f5;
+            color: #212529;
+            padding: 15px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: transform 0.2s;
+        }
+
+        .logo:hover {
+            transform: scale(1.02);
+        }
+
+        .logo img {
+            height: 40px;
+            width: auto;
+        }
+
+        .brand-text {
+            font-size: 24px;
+            font-weight: 800;
+            color: #212529;
+            letter-spacing: -1px;
+        }
+
+        .brand-text span {
+            color: #3498db;
+            font-weight: 400;
+        }
+
+        nav a {
+            color: #212529;
+            text-decoration: none;
+            margin-left: 20px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 600;
+            transition: color 0.2s;
+        }
+
+        nav a:hover {
+            color: #3498db;
+            text-decoration: none;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 30px auto;
+            min-height: 70vh;
+        }
+
+        .hero {
+            background: white;
+            padding: 50px;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid #ddd;
+            margin-bottom: 30px;
+        }
+
+        .hero h1 {
+            color: #2c3e50;
+            margin-top: 0;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            text-align: center;
+            transition: transform 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-cover {
+            height: 160px;
+            background: #34495e;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 50px;
+            font-weight: bold;
+        }
+
+        .card h3 {
+            margin: 10px 0 5px 0;
+            font-size: 18px;
+            color: #2c3e50;
+        }
+
+        .card p {
+            color: #666;
+            font-size: 14px;
+            margin: 0 0 15px 0;
+        }
+
+        .card .price {
+            font-weight: bold;
+            font-size: 20px;
+            color: #e67e22;
+            margin-bottom: 15px;
+        }
+
+        .btn {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background 0.2s;
+        }
+
+        .btn:hover {
+            background: #2980b9;
+        }
+
+        .btn-danger {
+            background: #e74c3c;
+        }
+
+        .btn-danger:hover {
+            background: #c0392b;
+        }
+
+        /* E-commerce Style Buttons */
+        .btn-cart {
+            background: #ffd814;
+            color: #0f1111;
+            border: 1px solid #fcd200;
+            padding: 10px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+
+        .btn-cart:hover {
+            background: #f7ca00;
+        }
+
+        .btn-wishlist {
+            background: #ffffff;
+            color: #0f1111;
+            border: 1px solid #d5d9d9;
+            padding: 10px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+
+        .btn-wishlist:hover {
+            background: #f7fafa;
+        }
+
+        .form-box {
+            max-width: 400px;
+            margin: 40px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+        }
+
+        .form-box h2 {
+            text-align: center;
+            margin-top: 0;
+            color: #2c3e50;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+
+        table {
+            width: 100%;
+            background: white;
+            border-collapse: collapse;
+            margin-top: 20px;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        th,
+        td {
+            padding: 15px;
+            border-bottom: 1px solid #ddd;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f8f9fa;
+            color: #333;
+        }
+
+        .cart-summary {
+            background: white;
+            padding: 20px;
+            margin-top: 20px;
+            border-radius: 8px;
+            text-align: right;
+            border: 1px solid #ddd;
+        }
+
+        /* Helpers */
+        .page {
+            display: none;
+        }
+
+        .active {
+            display: block;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: #7f8c8d;
+            margin-top: 40px;
+            border-top: 1px solid #ddd;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <a onclick="navigate('home')" class="logo">
+            <img src="Logo.png" alt="Logo">
+            <span class="brand-text">Book<span>Nest</span></span>
+        </a>
+        <nav>
+            <a onclick="navigate('home')">Home</a>
+            <a onclick="navigate('catalog')">Catalog</a>
+
+            <!-- Toggle based on login status -->
+            <span id="nav-guest">
+                <a onclick="navigate('login')">Login</a>
+                <a onclick="navigate('register')">Register</a>
+            </span>
+            <span id="nav-user" class="hidden">
+                <span id="user-greeting"
+                    style="color: #f1c40f; font-weight: bold; font-size: 14px; margin-right: 15px;"></span>
+                <a onclick="navigate('orders')">My Orders</a>
+                <a onclick="logout()">Logout</a>
+            </span>
+
+            <a onclick="navigate('wishlist')">❤️ Wishlist</a>
+            <a onclick="navigate('cart')">🛒 Cart (<span id="cart-count">0</span>)</a>
+        </nav>
+    </header>
+
+    <div class="container">
+        <!-- HOME PAGE -->
+        <div id="page-home" class="page active">
+            <div class="hero">
+                <h1>Welcome to BookNest</h1>
+                <p>Your simple, zero-setup, offline-ready academic bookstore.</p>
+                <br>
+                <button class="btn" onclick="navigate('catalog')">Start Shopping Now</button>
+            </div>
+            <h2>Featured Books</h2>
+            <div class="grid" id="home-grid"></div>
+        </div>
+
+        <!-- CATALOG PAGE -->
+        <div id="page-catalog" class="page">
+            <h2>Our Full Catalog</h2>
+            <div class="grid" id="catalog-grid"></div>
+        </div>
+
+        <!-- WISHLIST PAGE -->
+        <div id="page-wishlist" class="page">
+            <h2>Your Wishlist</h2>
+            <div class="grid" id="wishlist-grid"></div>
+        </div>
+
+        <!-- CART PAGE -->
+        <div id="page-cart" class="page">
+            <h2>Your Shopping Cart</h2>
+            <div id="cart-content"></div>
+        </div>
+
+        <!-- LOGIN PAGE -->
+        <div id="page-login" class="page">
+            <div class="form-box">
+                <h2>User Login</h2>
+                <input type="email" id="login-email" placeholder="Email Address">
+                <input type="password" id="login-pass" placeholder="Password">
+                <button class="btn" style="width: 100%; margin-top: 10px;" onclick="login()">Log In</button>
+            </div>
+        </div>
+
+        <!-- REGISTER PAGE -->
+        <div id="page-register" class="page">
+            <div class="form-box">
+                <h2>Create Account</h2>
+                <input type="text" id="reg-name" placeholder="Full Name">
+                <input type="email" id="reg-email" placeholder="Email Address">
+                <input type="password" id="reg-pass" placeholder="Password (min 6 chars)">
+                <button class="btn" style="width: 100%; margin-top: 10px;" onclick="register()">Sign Up</button>
+            </div>
+        </div>
+
+        <!-- RECEIPT PAGE -->
+        <div id="page-receipt" class="page">
+            <div class="form-box" style="max-width: 600px;">
+                <h2>Order Receipt</h2>
+                <div id="receipt-content"
+                    style="font-family: monospace; white-space: pre-line; background: #f8f9fa; padding: 20px; border-radius: 5px; margin: 20px 0; text-align: left;">
+                </div>
+                <button class="btn" onclick="downloadReceipt()" style="margin-right: 10px;">📄 Download Receipt</button>
+                <button class="btn" onclick="navigate('home')" style="background: #27ae60;">🏠 Back to Home</button>
+            </div>
+        </div>
+
+        <!-- ORDERS PAGE -->
+        <div id="page-orders" class="page">
+            <h2>My Order History</h2>
+            <div id="orders-content"></div>
+        </div>
+    </div>
+
+    <footer>
+        &copy; 2024 BookNest. Built simply using HTML, CSS, and LocalStorage Database.
+    </footer>
+
+    <!-- 
+============================================================
+ ZERO-SETUP LOCAL DATABASE & JAVASCRIPT LOGIC
+============================================================ 
+-->
+    <script>
+        // 1. Initial Mock Database (If empty)
+        const MOCK_BOOKS = [
+            { id: 1, title: 'The Alchemist', author: 'Paulo Coelho', price: 299, image: 'https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1654371463i/18144590.jpg' },
+            { id: 2, title: 'Atomic Habits', author: 'James Clear', price: 499, image: 'https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1535115320i/40121378.jpg' },
+            { id: 3, title: 'Harry Potter and the Sorcerers Stone', author: 'J.K. Rowling', price: 350, image: 'https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1474154022i/3.jpg' },
+            { id: 4, title: 'A Brief History of Time', author: 'Stephen Hawking', price: 399, image: 'https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1333578746i/3869.jpg' },
+            { id: 5, title: 'Sapiens', author: 'Yuval Noah Harari', price: 599, image: 'https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1420585954i/23692271.jpg' },
+            { id: 6, title: 'Clean Code', author: 'Robert C. Martin', price: 799, image: 'https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1436202607i/3735293.jpg' },
+            { id: 7, title: 'The Great Gatsby', author: 'F. Scott Fitzgerald', price: 249, image: 'https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1490528560i/4671.jpg' },
+            { id: 8, title: 'Thinking Fast and Slow', author: 'Daniel Kahneman', price: 549, image: 'https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1317793965i/11468377.jpg' },
+            { id: 9, title: 'Rich Dad Poor Dad', author: 'Robert Kiyosaki', price: 349, image: 'https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1388211242i/69571.jpg' },
+            { id: 10, title: '1984', author: 'George Orwell', price: 199, image: 'https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1657781256i/61439040.jpg' },
+            { id: 11, title: 'The Lean Startup', author: 'Eric Ries', price: 449, image: 'https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1333576876i/10127019.jpg' },
+            { id: 12, title: 'Wings of Fire', author: 'A.P.J. Abdul Kalam', price: 179, image: 'https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1295670969i/634583.jpg' },
+            { id: 13, title: 'The Kite Runner', author: 'Khaled Hosseini', price: 329, image: 'https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1579036753i/77203.jpg' },
+            { id: 14, title: 'Steve Jobs', author: 'Walter Isaacson', price: 599, image: 'https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1511288482i/11084145.jpg' },
+            { id: 15, title: 'The Psychology of Money', author: 'Morgan Housel', price: 399, image: 'https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1581527774i/41881472.jpg' },
+            { id: 16, title: 'Educated', author: 'Tara Westover', price: 449, image: 'https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1506026635i/35133922.jpg' },
+            
+            // Romantic / Love Novels
+            { id: 17, title: 'Pride and Prejudice', author: 'Jane Austen', price: 199, image: 'https://books.google.com/books/content?id=s1gVAAAAYAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api' },
+            { id: 18, title: 'The Notebook', author: 'Nicholas Sparks', price: 249, image: 'https://books.google.com/books/content?id=GoI7PgAACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api' },
+            { id: 19, title: 'Outlander', author: 'Diana Gabaldon', price: 399, image: 'https://books.google.com/books/content?id=7iF6BgAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api' },
+            { id: 20, title: 'Me Before You', author: 'Jojo Moyes', price: 299, image: 'https://books.google.com/books/content?id=bue8EQAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api' },
+            { id: 21, title: 'The Fault in Our Stars', author: 'John Green', price: 349, image: 'https://books.google.com/books/content?id=Qk8n0olOX5MC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api' },
+            { id: 22, title: 'Romeo and Juliet', author: 'William Shakespeare', price: 149, image: 'https://books.google.com/books/content?id=pprVEAAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api' },
+            { id: 23, title: 'It Ends with Us', author: 'Colleen Hoover', price: 450, image: 'https://books.google.com/books/content?id=UnIQEQAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api' },
+            { id: 24, title: 'Twilight', author: 'Stephenie Meyer', price: 399, image: 'https://books.google.com/books/content?id=lGjFtMRqp_YC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api' },
+            { id: 25, title: 'The Time Traveler\'s Wife', author: 'Audrey Niffenegger', price: 299, image: 'https://books.google.com/books/content?id=9UW3hrCowKAC&printsec=frontcover&img=1&zoom=1&source=gbs_api' },
+            { id: 26, title: 'The Duke and I', author: 'Julia Quinn', price: 350, image: 'https://books.google.com/books/content?id=-mlBcC_JXv8C&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api' },
+
+            // Mystery Books
+            { id: 27, title: 'Gone Girl', author: 'Gillian Flynn', price: 399, image: 'https://books.google.com/books/content?id=hxL2qWMAgv8C&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api' },
+            { id: 28, title: 'The Girl with the Dragon Tattoo', author: 'Stieg Larsson', price: 449, image: 'https://books.google.com/books/content?id=4FxNNFRnsZsC&printsec=frontcover&img=1&zoom=1&source=gbs_api' },
+            { id: 29, title: 'And Then There Were None', author: 'Agatha Christie', price: 299, image: 'https://books.google.com/books/content?id=gAD4EAAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api' },
+            { id: 30, title: 'The Da Vinci Code', author: 'Dan Brown', price: 350, image: 'https://books.google.com/books/content?id=6-pmDwAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api' },
+            { id: 31, title: 'The Silent Patient', author: 'Alex Michaelides', price: 399, image: 'https://books.google.com/books/content?id=a6NnDwAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api' },
+            { id: 32, title: 'Big Little Lies', author: 'Liane Moriarty', price: 349, image: 'https://books.google.com/books/content?id=xOaKAwAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api' },
+            { id: 33, title: 'Sharp Objects', author: 'Gillian Flynn', price: 299, image: 'https://books.google.com/books/content?id=4cNbvgEACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api' },
+            { id: 34, title: 'Murder on the Orient Express', author: 'Agatha Christie', price: 249, image: 'https://books.google.com/books/content?id=mqDEqJMosnAC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api' },
+            { id: 35, title: 'The Girl on the Train', author: 'Paula Hawkins', price: 350, image: 'https://books.google.com/books/content?id=BlZXvgEACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api' },
+            { id: 36, title: 'In the Woods', author: 'Tana French', price: 399, image: 'https://books.google.com/books/content?id=MidT_WA_lmYC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api' },
+
+            // Motivational Books
+            { id: 37, title: 'The 7 Habits of Highly Effective People', author: 'Stephen Covey', price: 499, image: 'https://books.google.com/books/content?id=upUxaNWSaRIC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api' },
+            { id: 38, title: 'Think and Grow Rich', author: 'Napoleon Hill', price: 199, image: 'https://books.google.com/books/content?id=sJIJEQAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api' },
+            { id: 39, title: 'Man\'s Search for Meaning', author: 'Viktor E. Frankl', price: 249, image: 'https://books.google.com/books/content?id=rG1qAAAAMAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api' },
+            { id: 40, title: 'Awaken the Giant Within', author: 'Tony Robbins', price: 399, image: 'https://books.google.com/books/content?id=iPpyLpX0Y1sC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api' },
+            { id: 41, title: 'How to Win Friends and Influence People', author: 'Dale Carnegie', price: 199, image: 'https://books.google.com/books/content?id=1rW-QpIAs8UC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api' },
+            { id: 42, title: 'The Power of Now', author: 'Eckhart Tolle', price: 299, image: 'https://books.google.com/books/content?id=NFQ7DwAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api' },
+            { id: 43, title: 'Mindset', author: 'Carol S. Dweck', price: 349, image: 'https://books.google.com/books/content?id=YDhjE39j-t0C&printsec=frontcover&img=1&zoom=1&source=gbs_api' },
+            { id: 44, title: 'Daring Greatly', author: 'Brené Brown', price: 399, image: 'https://books.google.com/books/content?id=cyRDrMMX8WoC&printsec=frontcover&img=1&zoom=1&source=gbs_api' },
+            { id: 45, title: 'Can\'t Hurt Me', author: 'David Goggins', price: 449, image: 'https://books.google.com/books/content?id=IeYmEAAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api' },
+            { id: 46, title: 'Start with Why', author: 'Simon Sinek', price: 399, image: 'https://books.google.com/books/content?id=r2yCRUxo0EYC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api' }
+        ];
+
+        // Sync logic: Always update the catalog to ensure new books and updated cover images are shown.
+        localStorage.setItem('booknest_books', JSON.stringify(MOCK_BOOKS));
+        let existingBooks = MOCK_BOOKS;
+        if (!localStorage.getItem('booknest_users')) {
+            localStorage.setItem('booknest_users', JSON.stringify([])); // Array of users
+        }
+        if (!localStorage.getItem('booknest_orders')) {
+            localStorage.setItem('booknest_orders', JSON.stringify([])); // Array of orders
+        }
+
+        // 2. State Management
+        let currentUser = JSON.parse(localStorage.getItem('booknest_session')) || null;
+        let cart = JSON.parse(localStorage.getItem('booknest_cart')) || [];
+        let wishlist = JSON.parse(localStorage.getItem('booknest_wishlist')) || [];
+
+        // 3. Page Navigation Router
+        function navigate(pageId) {
+            // Hide all pages
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            // Show specific page
+            document.getElementById('page-' + pageId).classList.add('active');
+
+            // Run specific logic per page
+            if (pageId === 'home') loadBooks('home-grid', 3);
+            if (pageId === 'catalog') loadBooks('catalog-grid');
+            if (pageId === 'cart') renderCart();
+            if (pageId === 'wishlist') renderWishlist();
+            if (pageId === 'receipt') updateNavBar();
+            if (pageId === 'orders') renderOrders();
+
+            updateNavBar();
+        }
+
+        // 4. Load Books from "Database"
+        function loadBooks(containerId, limit = null) {
+            let books = JSON.parse(localStorage.getItem('booknest_books') || '[]');
+            if (limit && books) books = books.slice(0, limit);
+
+            const container = document.getElementById(containerId);
+            if (!container) return;
+
+            if (books.length === 0) {
+                container.innerHTML = '<p style="grid-column: 1/-1; text-align: center;">No books found. Check your browser settings or refresh.</p>';
+                return;
+            }
+            container.innerHTML = books.map(book => `
+            <div class="card">
+                <img src="${book.image}" alt="${book.title}" style="width: 100%; height: 160px; object-fit: cover; border-radius: 6px; margin-bottom: 15px;" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                <div class="card-cover" style="background-color: #34495e; display: none;">${book.title.charAt(0)}</div>
+                <h3>${book.title}</h3>
+                <p>by ${book.author}</p>
+                <div class="price">₹${book.price}</div>
+                <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 10px;">
+                    <button class="btn-cart" style="width: 100%;" onclick="addToCart(${book.id})">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+                        Add to Cart
+                    </button>
+                    <button class="btn-wishlist" style="width: 100%;" onclick="addToWishlist(${book.id})">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                        Add to Wishlist
+                    </button>
+                </div>
+            </div>
+        `).join('');
+        }
+
+        // 5. Authentication Logic (Login/Register)
+        function register() {
+            const name = document.getElementById('reg-name').value.trim();
+            const email = document.getElementById('reg-email').value.trim();
+            const pass = document.getElementById('reg-pass').value;
+
+            if (!name || !email || pass.length < 6) return alert("Please fill all fields properly.");
+
+            let users = JSON.parse(localStorage.getItem('booknest_users'));
+
+            if (users.find(u => u.email === email.toLowerCase())) {
+                return alert("This email is already registered!");
+            }
+
+            const newUser = { id: Date.now(), name, email: email.toLowerCase(), pass };
+            users.push(newUser);
+            localStorage.setItem('booknest_users', JSON.stringify(users));
+
+            alert("Account Created successfully! You can now log in.");
+            navigate('login');
+        }
+
+        function login() {
+            const email = document.getElementById('login-email').value.trim();
+            const pass = document.getElementById('login-pass').value;
+
+            if (!email || !pass) {
+                alert("Please enter both email and password.");
+                return;
+            }
+
+            let users = JSON.parse(localStorage.getItem('booknest_users'));
+            let user = users.find(u => u.email === email.toLowerCase() && u.pass === pass);
+
+            if (user) {
+                currentUser = { id: user.id, name: user.name, email: user.email };
+                localStorage.setItem('booknest_session', JSON.stringify(currentUser));
+                alert("Welcome back, " + user.name + "!");
+                navigate('home');
+            } else {
+                alert("Invalid email or password.");
+            }
+        }
+
+        function logout() {
+            currentUser = null;
+            cart = []; // Empty cart on logout for simplicity
+            wishlist = []; // Empty wishlist on logout for simplicity
+            localStorage.removeItem('booknest_session');
+            saveCart();
+            saveWishlist();
+            navigate('home');
+        }
+
+        function updateNavBar() {
+            const cartStatus = document.getElementById('cart-count');
+            if (cartStatus) {
+                cartStatus.textContent = cart.reduce((sum, item) => sum + item.qty, 0);
+            }
+
+            if (currentUser) {
+                document.getElementById('nav-guest').classList.add('hidden');
+                document.getElementById('nav-user').classList.remove('hidden');
+                document.getElementById('user-greeting').textContent = "Hi, " + currentUser.name.split(" ")[0];
+            } else {
+                document.getElementById('nav-guest').classList.remove('hidden');
+                document.getElementById('nav-user').classList.add('hidden');
+            }
+        }
+
+        // 6. Cart Management Logic
+        function addToCart(bookId) {
+            let books = JSON.parse(localStorage.getItem('booknest_books'));
+            let book = books.find(b => b.id === bookId);
+
+            let existingItem = cart.find(i => i.id === bookId);
+            if (existingItem) {
+                existingItem.qty += 1;
+            } else {
+                cart.push({ ...book, qty: 1 });
+            }
+
+            saveCart();
+            alert('"' + book.title + '" added to cart!');
+        }
+
+        function removeFromCart(bookId) {
+            cart = cart.filter(item => item.id !== bookId);
+            saveCart();
+            renderCart();
+        }
+
+        function saveCart() {
+            localStorage.setItem('booknest_cart', JSON.stringify(cart));
+            updateNavBar();
+        }
+
+        function renderCart() {
+            const container = document.getElementById('cart-content');
+            if (cart.length === 0) {
+                container.innerHTML = '<div style="text-align:center; padding: 40px; background: white; border-radius: 8px;"><h3>Your cart is empty.</h3><br><button class="btn" onclick="navigate(\'catalog\')">Browse Books</button></div>';
+                return;
+            }
+
+            let total = 0;
+            let html = `
+            <table>
+                <tr><th>Book Title</th><th>Price</th><th>Quantity</th><th>Subtotal</th><th>Action</th></tr>
+        `;
+
+            cart.forEach(item => {
+                const subtotal = item.price * item.qty;
+                total += subtotal;
+                html += `
+                <tr>
+                    <td style="font-weight:bold;">${item.title}</td>
+                    <td>₹${item.price}</td>
+                    <td>${item.qty}</td>
+                    <td>₹${subtotal}</td>
+                    <td><button class="btn btn-danger" onclick="removeFromCart(${item.id})">Remove</button></td>
+                </tr>
+            `;
+            });
+
+            html += `</table>
+            <div class="cart-summary">
+                <h2 style="margin: 0 0 15px 0;">Total Amount: <span style="color:#27ae60">₹${total}</span></h2>
+                <button class="btn" style="background:#27ae60; padding: 12px 30px;" onclick="checkout()">Proceed to Checkout</button>
+            </div>
+        `;
+
+            container.innerHTML = html;
+        }
+
+        // 6.5 Wishlist Management Logic
+        function addToWishlist(bookId) {
+            let books = JSON.parse(localStorage.getItem('booknest_books'));
+            let book = books.find(b => b.id === bookId);
+
+            if (!wishlist.find(i => i.id === bookId)) {
+                wishlist.push(book);
+                saveWishlist();
+                alert('"' + book.title + '" added to wishlist!');
+            } else {
+                alert('"' + book.title + '" is already in your wishlist.');
+            }
+        }
+
+        function removeFromWishlist(bookId) {
+            wishlist = wishlist.filter(item => item.id !== bookId);
+            saveWishlist();
+            if (document.getElementById('page-wishlist').classList.contains('active')) {
+                renderWishlist();
+            }
+        }
+
+        function saveWishlist() {
+            localStorage.setItem('booknest_wishlist', JSON.stringify(wishlist));
+        }
+
+        function renderWishlist() {
+            const container = document.getElementById('wishlist-grid');
+            if (wishlist.length === 0) {
+                container.innerHTML = '<div style="grid-column: 1/-1; text-align:center; padding: 40px; background: white; border-radius: 8px;"><h3>Your wishlist is empty.</h3><br><button class="btn" onclick="navigate(\'catalog\')">Browse Books</button></div>';
+                return;
+            }
+
+            container.innerHTML = wishlist.map(book => `
+            <div class="card">
+                <img src="${book.image}" alt="${book.title}" style="width: 100%; height: 160px; object-fit: cover; border-radius: 6px; margin-bottom: 15px;" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                <div class="card-cover" style="background-color: #34495e; display: none;">${book.title.charAt(0)}</div>
+                <h3>${book.title}</h3>
+                <p>by ${book.author}</p>
+                <div class="price">₹${book.price}</div>
+                <div style="display: flex; gap: 8px; flex-direction: column; margin-top: 10px;">
+                    <button class="btn-cart" style="width: 100%;" onclick="addToCart(${book.id})">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+                        Add to Cart
+                    </button>
+                    <button class="btn-wishlist" style="width: 100%; color: #e74c3c;" onclick="removeFromWishlist(${book.id})">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                        Remove
+                    </button>
+                </div>
+            </div>
+        `).join('');
+        }
+
+        let currentReceiptContent = '';
+        let currentOrderId = '';
+
+        function checkout() {
+            if (!currentUser) {
+                alert("Please log in to place an order.");
+                navigate('login');
+                return;
+            }
+
+            // Save order to database
+            saveOrderToDatabase();
+
+            // Generate and show receipt
+            showReceipt();
+
+            cart = [];
+            saveCart();
+        }
+
+        function saveOrderToDatabase() {
+            const orderDate = new Date().toISOString();
+            currentOrderId = 'BN' + Date.now();
+            let total = 0;
+
+            const orderItems = cart.map(item => {
+                const subtotal = item.price * item.qty;
+                total += subtotal;
+                return {
+                    id: item.id,
+                    title: item.title,
+                    author: item.author,
+                    price: item.price,
+                    quantity: item.qty,
+                    subtotal: subtotal
+                };
+            });
+
+            const order = {
+                orderId: currentOrderId,
+                userId: currentUser.id,
+                customerName: currentUser.name,
+                customerEmail: currentUser.email,
+                orderDate: orderDate,
+                items: orderItems,
+                totalAmount: total,
+                status: 'Completed'
+            };
+
+            let orders = JSON.parse(localStorage.getItem('booknest_orders'));
+            orders.push(order);
+            localStorage.setItem('booknest_orders', JSON.stringify(orders));
+        }
+
+        function showReceipt() {
+            const orderDate = new Date().toLocaleString();
+            let total = 0;
+
+            let receiptContent = `========================================
+           BOOKNEST BOOKSTORE
+        Your Simple Academic Bookstore
+========================================
+
+Order ID: ${currentOrderId}
+Date: ${orderDate}
+Customer: ${currentUser.name}
+Email: ${currentUser.email}
+
+========================================
+                ITEMS
+========================================
+`;
+
+            cart.forEach(item => {
+                const subtotal = item.price * item.qty;
+                total += subtotal;
+                receiptContent += `
+${item.title}
+by ${item.author}
+Qty: ${item.qty} x ₹${item.price} = ₹${subtotal}
+----------------------------------------`;
+            });
+
+            receiptContent += `
+
+========================================
+TOTAL AMOUNT: ₹${total}
+========================================
+
+Thank you for shopping with BookNest!
+Visit us again for more amazing books.
+
+========================================`;
+
+            // Store receipt content for download
+            currentReceiptContent = receiptContent;
+
+            // Display receipt in the app
+            document.getElementById('receipt-content').textContent = receiptContent;
+            navigate('receipt');
+        }
+
+        function downloadReceipt() {
+            if (!currentReceiptContent) return;
+
+            const blob = new Blob([currentReceiptContent], { type: 'text/plain' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `BookNest_Receipt_${currentOrderId}.txt`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+        }
+
+        function renderOrders() {
+            if (!currentUser) {
+                navigate('login');
+                return;
+            }
+
+            const container = document.getElementById('orders-content');
+            let orders = JSON.parse(localStorage.getItem('booknest_orders'));
+
+            // Filter orders for current user
+            const userOrders = orders.filter(order => order.userId === currentUser.id);
+
+            if (userOrders.length === 0) {
+                container.innerHTML = '<div style="text-align:center; padding: 40px; background: white; border-radius: 8px;"><h3>No orders found.</h3><p>Start shopping to see your order history here.</p><br><button class="btn" onclick="navigate(\'catalog\')">Browse Books</button></div>';
+                return;
+            }
+
+            // Sort orders by date (newest first)
+            userOrders.sort((a, b) => new Date(b.orderDate) - new Date(a.orderDate));
+
+            let html = '';
+            userOrders.forEach(order => {
+                const orderDate = new Date(order.orderDate).toLocaleString();
+                html += `
+                <div style="background: white; padding: 20px; margin-bottom: 20px; border-radius: 8px; border: 1px solid #ddd;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                        <h3 style="margin: 0; color: #2c3e50;">Order #${order.orderId}</h3>
+                        <span style="background: #27ae60; color: white; padding: 5px 10px; border-radius: 15px; font-size: 12px;">${order.status}</span>
+                    </div>
+                    <p style="margin: 5px 0; color: #666;"><strong>Date:</strong> ${orderDate}</p>
+                    <p style="margin: 5px 0; color: #666;"><strong>Total:</strong> ₹${order.totalAmount}</p>
+                    <p style="margin: 5px 0 15px 0; color: #666;"><strong>Items:</strong> ${order.items.length} book(s)</p>
+                    
+                    <div style="border-top: 1px solid #eee; padding-top: 15px;">
+                        <h4 style="margin: 0 0 10px 0; color: #2c3e50;">Items:</h4>`;
+
+                order.items.forEach(item => {
+                    html += `
+                        <div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #f0f0f0;">
+                            <div>
+                                <strong>${item.title}</strong><br>
+                                <small style="color: #666;">by ${item.author}</small>
+                            </div>
+                            <div style="text-align: right;">
+                                <div>Qty: ${item.quantity}</div>
+                                <div style="color: #e67e22; font-weight: bold;">₹${item.subtotal}</div>
+                            </div>
+                        </div>`;
+                });
+
+                html += `
+                    </div>
+                </div>`;
+            });
+
+            container.innerHTML = html;
+        }
+
+        // 7. Initialization on Page Load
+        window.onload = () => {
+            navigate('home');
+        };
+    </script>
+
+</body>
+
+</html>
