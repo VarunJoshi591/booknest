@@ -372,6 +372,49 @@
             </div>
         </div>
 
+        <!-- PAYMENT PAGE -->
+        <div id="page-payment" class="page">
+            <div class="form-box" style="max-width: 500px;">
+                <h2>Payment Method</h2>
+                
+                <div style="margin-bottom: 20px;">
+                    <div style="display: flex; gap: 10px; margin-bottom: 20px;">
+                        <button class="btn" id="cod-tab" onclick="switchPaymentMethod('cod')" style="flex: 1; background: #3498db;">💵 COD</button>
+                        <button class="btn" id="upi-tab" onclick="switchPaymentMethod('upi')" style="flex: 1; background: #6c757d;">📱 UPI</button>
+                        <button class="btn" id="card-tab" onclick="switchPaymentMethod('card')" style="flex: 1; background: #6c757d;">💳 Card</button>
+                    </div>
+                </div>
+
+                <!-- COD Form -->
+                <div id="cod-form" class="payment-form">
+                    <p style="text-align: center; color: #555; padding: 20px 0;">You will pay with Cash on Delivery when the order arrives.</p>
+                </div>
+
+                <!-- UPI Payment Form -->
+                <div id="upi-form" class="payment-form" style="display: none;">
+                    <p style="text-align: center; color: #555;">Scan the QR Code to pay:</p>
+                    <div id="upi-qr" style="text-align:center; margin:15px 0;">
+                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=upi://pay?pa=booknest@ybl&pn=BookNest" alt="UPI QR Code" style="border: 1px solid #ddd; padding: 10px; border-radius: 8px;">
+                    </div>
+                    <input type="text" id="upi-id" placeholder="Or enter your UPI ID (e.g., yourname@paytm)">
+                </div>
+
+                <!-- Card Payment Form -->
+                <div id="card-form" class="payment-form" style="display: none;">
+                    <input type="text" id="card-number" placeholder="Card Number (e.g. 1234 5678 9012 3456)" maxlength="19">
+                    <div style="display: flex; gap: 15px;">
+                        <input type="text" id="card-expiry" placeholder="MM/YY" maxlength="5" style="flex: 1;">
+                        <input type="text" id="card-cvv" placeholder="CVV" maxlength="4" style="flex: 1;">
+                    </div>
+                    <input type="text" id="card-name" placeholder="Cardholder Name">
+                </div>
+
+                <button class="btn" style="width: 100%; margin-top: 20px; background: #27ae60;" onclick="processPayment()">
+                    Complete Payment
+                </button>
+            </div>
+        </div>
+
         <!-- RECEIPT PAGE -->
         <div id="page-receipt" class="page">
             <div class="form-box" style="max-width: 600px;">
@@ -484,6 +527,7 @@
             if (pageId === 'catalog') loadBooks('catalog-grid');
             if (pageId === 'cart') renderCart();
             if (pageId === 'wishlist') renderWishlist();
+            if (pageId === 'payment') updateNavBar();
             if (pageId === 'receipt') updateNavBar();
             if (pageId === 'orders') renderOrders();
 
@@ -721,6 +765,41 @@
                 return;
             }
 
+            // Navigate to payment page instead of completing order immediately
+            navigate('payment');
+        }
+
+        let currentPaymentMethod = 'cod';
+
+        function switchPaymentMethod(method) {
+            currentPaymentMethod = method;
+            document.getElementById('cod-form').style.display = 'none';
+            document.getElementById('upi-form').style.display = 'none';
+            document.getElementById('card-form').style.display = 'none';
+            
+            document.getElementById('cod-tab').style.background = '#6c757d';
+            document.getElementById('upi-tab').style.background = '#6c757d';
+            document.getElementById('card-tab').style.background = '#6c757d';
+
+            document.getElementById(method + '-form').style.display = 'block';
+            document.getElementById(method + '-tab').style.background = '#3498db';
+        }
+
+        function processPayment() {
+            if (currentPaymentMethod === 'card') {
+                const cardNo = document.getElementById('card-number').value;
+                const cardExp = document.getElementById('card-expiry').value;
+                const cardCvv = document.getElementById('card-cvv').value;
+                if (!cardNo || cardNo.length < 16) {
+                    alert("Please enter a valid card number.");
+                    return;
+                }
+                if (!cardExp || !cardCvv) {
+                    alert("Please enter card expiry and CVV.");
+                    return;
+                }
+            }
+
             // Save order to database
             saveOrderToDatabase();
 
@@ -729,6 +808,15 @@
 
             cart = [];
             saveCart();
+
+            // clear form
+            if(document.getElementById('upi-id')) document.getElementById('upi-id').value = '';
+            if(document.getElementById('card-number')) document.getElementById('card-number').value = '';
+            if(document.getElementById('card-expiry')) document.getElementById('card-expiry').value = '';
+            if(document.getElementById('card-cvv')) document.getElementById('card-cvv').value = '';
+            if(document.getElementById('card-name')) document.getElementById('card-name').value = '';
+            
+            switchPaymentMethod('cod'); // Reset for next time
         }
 
         function saveOrderToDatabase() {
@@ -757,6 +845,7 @@
                 orderDate: orderDate,
                 items: orderItems,
                 totalAmount: total,
+                paymentMethod: currentPaymentMethod.toUpperCase(),
                 status: 'Completed'
             };
 
@@ -778,6 +867,7 @@ Order ID: ${currentOrderId}
 Date: ${orderDate}
 Customer: ${currentUser.name}
 Email: ${currentUser.email}
+Payment Method: ${currentPaymentMethod.toUpperCase()}
 
 ========================================
                 ITEMS
