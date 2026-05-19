@@ -897,11 +897,13 @@
                 });
                 const data = await res.json();
                 
-                if (data.status === 'success') {
+                if (data.success === true || (data.message && data.message.includes("Account created"))) {
                     // Sync with local storage
                     let users = JSON.parse(localStorage.getItem('booknest_users'));
-                    users.push({ id: Date.now(), name, email: email.toLowerCase(), pass });
-                    localStorage.setItem('booknest_users', JSON.stringify(users));
+                    if (!users.find(u => u.email === email.toLowerCase())) {
+                        users.push({ id: Date.now(), name, email: email.toLowerCase(), pass });
+                        localStorage.setItem('booknest_users', JSON.stringify(users));
+                    }
 
                     alert("Account Created successfully! You can now log in.");
                     navigate('login');
@@ -938,13 +940,30 @@
                 });
                 const data = await res.json();
 
-                if (data.status === 'success') {
+                if (data.success === true) {
                     currentUser = { id: data.data.id, name: data.data.full_name, email: data.data.email };
                     localStorage.setItem('booknest_session', JSON.stringify(currentUser));
                     alert(data.message || "Welcome back!");
                     navigate('home');
                 } else {
-                    alert(data.message || "Invalid email or password.");
+                    // Try to sync offline user to backend if valid offline credentials
+                    let users = JSON.parse(localStorage.getItem('booknest_users'));
+                    let user = users.find(u => u.email === email.toLowerCase() && u.pass === pass);
+                    if (user) {
+                        try {
+                            await fetch('api/auth.php?action=register', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({ full_name: user.name, email: user.email, password: user.pass })
+                            });
+                        } catch (err) {}
+                        currentUser = { id: user.id, name: user.name, email: user.email };
+                        localStorage.setItem('booknest_session', JSON.stringify(currentUser));
+                        alert("Welcome back, " + user.name + "! (Your offline account was synced)");
+                        navigate('home');
+                    } else {
+                        alert(data.message || "Invalid email or password.");
+                    }
                 }
             } catch (e) {
                 console.warn("Backend not reachable. Using local storage fallback.");
