@@ -695,7 +695,7 @@
             <div class="form-box" style="max-width: 600px;">
                 <h2>Order Receipt</h2>
                 <div id="receipt-content"
-                    style="font-family: monospace; white-space: pre-line; background: #f8f9fa; padding: 20px; border-radius: 5px; margin: 20px 0; text-align: left;">
+                    style="font-family: monospace; white-space: pre-line; background: var(--header-bg); border: 1px solid var(--border-color); color: var(--text-color); padding: 20px; border-radius: 5px; margin: 20px 0; text-align: left;">
                 </div>
                 <button class="btn" onclick="downloadReceipt()" style="margin-right: 10px;">📄 Download Receipt</button>
                 <button class="btn" onclick="navigate('home')" style="background: #27ae60;">🏠 Back to Home</button>
@@ -890,7 +890,7 @@
             if (!name || !email || pass.length < 6) return alert("Please fill all fields properly (min 6 chars).");
 
             try {
-                const res = await fetch('api/auth.php?action=register', {
+                const res = await fetch('http://localhost/booknest/api/auth.php?action=register', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ full_name: name, email: email, password: pass })
@@ -933,7 +933,7 @@
             }
 
             try {
-                const res = await fetch('api/auth.php?action=login', {
+                const res = await fetch('http://localhost/booknest/api/auth.php?action=login', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ email: email, password: pass })
@@ -951,7 +951,7 @@
                     let user = users.find(u => u.email === email.toLowerCase() && u.pass === pass);
                     if (user) {
                         try {
-                            await fetch('api/auth.php?action=register', {
+                            await fetch('http://localhost/booknest/api/auth.php?action=register', {
                                 method: 'POST',
                                 headers: { 'Content-Type': 'application/json' },
                                 body: JSON.stringify({ full_name: user.name, email: user.email, password: user.pass })
@@ -983,7 +983,7 @@
 
         async function logout() {
             try {
-                await fetch('api/auth.php?action=logout', { method: 'POST' });
+                await fetch('http://localhost/booknest/api/auth.php?action=logout', { method: 'POST' });
             } catch(e) { /* ignore */ }
             
             currentUser = null;
