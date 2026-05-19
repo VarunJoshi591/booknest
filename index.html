@@ -374,44 +374,211 @@
 
         <!-- PAYMENT PAGE -->
         <div id="page-payment" class="page">
-            <div class="form-box" style="max-width: 500px;">
-                <h2>Payment Method</h2>
-                
-                <div style="margin-bottom: 20px;">
-                    <div style="display: flex; gap: 10px; margin-bottom: 20px;">
-                        <button class="btn" id="cod-tab" onclick="switchPaymentMethod('cod')" style="flex: 1; background: #3498db;">💵 COD</button>
-                        <button class="btn" id="upi-tab" onclick="switchPaymentMethod('upi')" style="flex: 1; background: #6c757d;">📱 UPI</button>
-                        <button class="btn" id="card-tab" onclick="switchPaymentMethod('card')" style="flex: 1; background: #6c757d;">💳 Card</button>
+            <style>
+                .saas-payment-container {
+                    max-width: 550px;
+                    margin: 40px auto;
+                    background: #ffffff;
+                    border-radius: 16px;
+                    box-shadow: 0 10px 40px -10px rgba(0,0,0,0.1);
+                    overflow: hidden;
+                    border: 1px solid #eaebec;
+                }
+                .saas-payment-header {
+                    background: #fafbfc;
+                    padding: 30px;
+                    border-bottom: 1px solid #eaebec;
+                    text-align: center;
+                }
+                .saas-payment-header h2 {
+                    margin: 0;
+                    color: #1a1f36;
+                    font-size: 24px;
+                    font-weight: 700;
+                    letter-spacing: -0.5px;
+                }
+                .saas-payment-header p {
+                    margin: 10px 0 0;
+                    color: #4f566b;
+                    font-size: 15px;
+                }
+                .saas-payment-body {
+                    padding: 35px 30px;
+                }
+                .payment-method-selector {
+                    display: grid;
+                    grid-template-columns: repeat(3, 1fr);
+                    gap: 15px;
+                    margin-bottom: 35px;
+                }
+                .method-card {
+                    border: 2px solid #eaebec;
+                    border-radius: 10px;
+                    padding: 18px 10px;
+                    text-align: center;
+                    cursor: pointer;
+                    transition: all 0.2s ease;
+                    background: #fff;
+                    color: #4f566b;
+                    font-weight: 600;
+                    font-size: 14px;
+                }
+                .method-card:hover {
+                    border-color: #c1c9d2;
+                }
+                .method-card.active {
+                    border-color: #635bff;
+                    background: #f8f8ff;
+                    color: #635bff;
+                    box-shadow: 0 4px 12px rgba(99, 91, 255, 0.1);
+                }
+                .method-card svg {
+                    display: block;
+                    margin: 0 auto 10px;
+                    width: 24px;
+                    height: 24px;
+                }
+                .saas-input-group {
+                    margin-bottom: 22px;
+                }
+                .saas-input-group label {
+                    display: block;
+                    margin-bottom: 8px;
+                    font-size: 13px;
+                    font-weight: 600;
+                    color: #3c4257;
+                }
+                .saas-input {
+                    width: 100%;
+                    padding: 14px 16px;
+                    border: 1px solid #e0e6eb;
+                    border-radius: 8px;
+                    font-size: 15px;
+                    color: #1a1f36;
+                    transition: all 0.2s;
+                    box-sizing: border-box;
+                    background: #fff;
+                    box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+                }
+                .saas-input:focus {
+                    outline: none;
+                    border-color: #635bff;
+                    box-shadow: 0 0 0 3px rgba(99, 91, 255, 0.15);
+                }
+                .saas-input::placeholder {
+                    color: #a3acb9;
+                }
+                .saas-btn-pay {
+                    width: 100%;
+                    background: #1a1f36;
+                    color: #fff;
+                    border: none;
+                    padding: 16px;
+                    border-radius: 8px;
+                    font-size: 16px;
+                    font-weight: 600;
+                    cursor: pointer;
+                    transition: all 0.2s;
+                    margin-top: 15px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    gap: 10px;
+                    box-shadow: 0 4px 10px rgba(26, 31, 54, 0.15);
+                }
+                .saas-btn-pay:hover {
+                    background: #3c4257;
+                    transform: translateY(-1px);
+                    box-shadow: 0 6px 15px rgba(26, 31, 54, 0.2);
+                }
+                .saas-btn-pay:active {
+                    transform: translateY(1px);
+                }
+                .secure-badge {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    gap: 6px;
+                    color: #697386;
+                    font-size: 13px;
+                    margin-top: 25px;
+                }
+            </style>
+            
+            <div class="saas-payment-container">
+                <div class="saas-payment-header">
+                    <h2>Complete Payment</h2>
+                    <p>Total amount: <strong style="color: #1a1f36; font-size: 18px;" id="payment-total-amount">₹0</strong></p>
+                </div>
+                <div class="saas-payment-body">
+                    <div class="payment-method-selector">
+                        <div class="method-card" id="card-tab" onclick="switchPaymentMethod('card')">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path></svg>
+                            Card
+                        </div>
+                        <div class="method-card" id="upi-tab" onclick="switchPaymentMethod('upi')">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
+                            UPI App
+                        </div>
+                        <div class="method-card active" id="cod-tab" onclick="switchPaymentMethod('cod')">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                            Cash
+                        </div>
+                    </div>
+
+                    <!-- COD Form -->
+                    <div id="cod-form" class="payment-form">
+                        <div style="background: #f8f9fa; border: 1px dashed #c1c9d2; padding: 25px; border-radius: 8px; text-align: center; color: #4f566b; margin-bottom: 10px;">
+                            <svg style="width:36px;height:36px;margin:0 auto 12px;color:#a3acb9;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                            <p style="margin:0; line-height: 1.5;">You will pay with Cash on Delivery when the order is successfully delivered to your doorstep.</p>
+                        </div>
+                    </div>
+
+                    <!-- UPI Payment Form -->
+                    <div id="upi-form" class="payment-form" style="display: none;">
+                        <div style="text-align: center; margin-bottom: 25px;">
+                            <div style="display: inline-block; padding: 15px; background: #fff; border: 1px solid #eaebec; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.03);">
+                                <img src="https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=upi://pay?pa=booknest@ybl&pn=BookNest" alt="UPI QR Code" style="display:block; border-radius: 4px;">
+                            </div>
+                            <p style="color: #697386; font-size: 14px; margin-top: 15px;">Scan with Google Pay, PhonePe, or Paytm</p>
+                        </div>
+                        <div style="display: flex; align-items: center; margin: 25px 0;">
+                            <hr style="flex: 1; border: none; border-top: 1px solid #eaebec;">
+                            <span style="padding: 0 15px; color: #a3acb9; font-size: 12px; font-weight: 700; text-transform: uppercase;">or</span>
+                            <hr style="flex: 1; border: none; border-top: 1px solid #eaebec;">
+                        </div>
+                        <div class="saas-input-group">
+                            <label>UPI ID</label>
+                            <input type="text" class="saas-input" id="upi-id" placeholder="e.g. username@okaxis">
+                        </div>
+                    </div>
+
+                    <!-- Card Payment Form -->
+                    <div id="card-form" class="payment-form" style="display: none;">
+                        <div class="saas-input-group">
+                            <label>Card Information</label>
+                            <input type="text" class="saas-input" id="card-number" placeholder="0000 0000 0000 0000" maxlength="19" style="border-bottom-left-radius: 0; border-bottom-right-radius: 0;">
+                            <div style="display: flex;">
+                                <input type="text" class="saas-input" id="card-expiry" placeholder="MM / YY" maxlength="5" style="border-top-left-radius: 0; border-bottom-right-radius: 0; border-top: none; border-right: none; width: 50%;">
+                                <input type="text" class="saas-input" id="card-cvv" placeholder="CVC" maxlength="4" style="border-top-right-radius: 0; border-bottom-left-radius: 0; border-top: none; width: 50%;">
+                            </div>
+                        </div>
+                        <div class="saas-input-group">
+                            <label>Name on Card</label>
+                            <input type="text" class="saas-input" id="card-name" placeholder="John Doe">
+                        </div>
+                    </div>
+
+                    <button class="saas-btn-pay" onclick="processPayment()">
+                        <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                        Pay Securely
+                    </button>
+                    
+                    <div class="secure-badge">
+                        <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+                        Payments are 100% secure and encrypted
                     </div>
                 </div>
-
-                <!-- COD Form -->
-                <div id="cod-form" class="payment-form">
-                    <p style="text-align: center; color: #555; padding: 20px 0;">You will pay with Cash on Delivery when the order arrives.</p>
-                </div>
-
-                <!-- UPI Payment Form -->
-                <div id="upi-form" class="payment-form" style="display: none;">
-                    <p style="text-align: center; color: #555;">Scan the QR Code to pay:</p>
-                    <div id="upi-qr" style="text-align:center; margin:15px 0;">
-                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=upi://pay?pa=booknest@ybl&pn=BookNest" alt="UPI QR Code" style="border: 1px solid #ddd; padding: 10px; border-radius: 8px;">
-                    </div>
-                    <input type="text" id="upi-id" placeholder="Or enter your UPI ID (e.g., yourname@paytm)">
-                </div>
-
-                <!-- Card Payment Form -->
-                <div id="card-form" class="payment-form" style="display: none;">
-                    <input type="text" id="card-number" placeholder="Card Number (e.g. 1234 5678 9012 3456)" maxlength="19">
-                    <div style="display: flex; gap: 15px;">
-                        <input type="text" id="card-expiry" placeholder="MM/YY" maxlength="5" style="flex: 1;">
-                        <input type="text" id="card-cvv" placeholder="CVV" maxlength="4" style="flex: 1;">
-                    </div>
-                    <input type="text" id="card-name" placeholder="Cardholder Name">
-                </div>
-
-                <button class="btn" style="width: 100%; margin-top: 20px; background: #27ae60;" onclick="processPayment()">
-                    Complete Payment
-                </button>
             </div>
         </div>
 
@@ -765,6 +932,11 @@
                 return;
             }
 
+            // Calculate total for payment page display
+            let total = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+            const totalEl = document.getElementById('payment-total-amount');
+            if (totalEl) totalEl.textContent = '₹' + total;
+
             // Navigate to payment page instead of completing order immediately
             navigate('payment');
         }
@@ -777,12 +949,12 @@
             document.getElementById('upi-form').style.display = 'none';
             document.getElementById('card-form').style.display = 'none';
             
-            document.getElementById('cod-tab').style.background = '#6c757d';
-            document.getElementById('upi-tab').style.background = '#6c757d';
-            document.getElementById('card-tab').style.background = '#6c757d';
+            document.getElementById('cod-tab').classList.remove('active');
+            document.getElementById('upi-tab').classList.remove('active');
+            document.getElementById('card-tab').classList.remove('active');
 
             document.getElementById(method + '-form').style.display = 'block';
-            document.getElementById(method + '-tab').style.background = '#3498db';
+            document.getElementById(method + '-tab').classList.add('active');
         }
 
         function processPayment() {
