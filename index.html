@@ -882,28 +882,46 @@
         }
 
         // 5. Authentication Logic (Login/Register)
-        function register() {
+        async function register() {
             const name = document.getElementById('reg-name').value.trim();
             const email = document.getElementById('reg-email').value.trim();
             const pass = document.getElementById('reg-pass').value;
 
-            if (!name || !email || pass.length < 6) return alert("Please fill all fields properly.");
+            if (!name || !email || pass.length < 6) return alert("Please fill all fields properly (min 6 chars).");
 
-            let users = JSON.parse(localStorage.getItem('booknest_users'));
+            try {
+                const res = await fetch('api/auth.php?action=register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ full_name: name, email: email, password: pass })
+                });
+                const data = await res.json();
+                
+                if (data.status === 'success') {
+                    // Sync with local storage
+                    let users = JSON.parse(localStorage.getItem('booknest_users'));
+                    users.push({ id: Date.now(), name, email: email.toLowerCase(), pass });
+                    localStorage.setItem('booknest_users', JSON.stringify(users));
 
-            if (users.find(u => u.email === email.toLowerCase())) {
-                return alert("This email is already registered!");
+                    alert("Account Created successfully! You can now log in.");
+                    navigate('login');
+                } else {
+                    alert(data.message || "Registration failed.");
+                }
+            } catch (e) {
+                console.warn("Backend not reachable. Using local storage fallback.");
+                let users = JSON.parse(localStorage.getItem('booknest_users'));
+                if (users.find(u => u.email === email.toLowerCase())) {
+                    return alert("This email is already registered locally!");
+                }
+                users.push({ id: Date.now(), name, email: email.toLowerCase(), pass });
+                localStorage.setItem('booknest_users', JSON.stringify(users));
+                alert("Account Created successfully (Offline)! You can now log in.");
+                navigate('login');
             }
-
-            const newUser = { id: Date.now(), name, email: email.toLowerCase(), pass };
-            users.push(newUser);
-            localStorage.setItem('booknest_users', JSON.stringify(users));
-
-            alert("Account Created successfully! You can now log in.");
-            navigate('login');
         }
 
-        function login() {
+        async function login() {
             const email = document.getElementById('login-email').value.trim();
             const pass = document.getElementById('login-pass').value;
 
@@ -912,20 +930,43 @@
                 return;
             }
 
-            let users = JSON.parse(localStorage.getItem('booknest_users'));
-            let user = users.find(u => u.email === email.toLowerCase() && u.pass === pass);
+            try {
+                const res = await fetch('api/auth.php?action=login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: email, password: pass })
+                });
+                const data = await res.json();
 
-            if (user) {
-                currentUser = { id: user.id, name: user.name, email: user.email };
-                localStorage.setItem('booknest_session', JSON.stringify(currentUser));
-                alert("Welcome back, " + user.name + "!");
-                navigate('home');
-            } else {
-                alert("Invalid email or password.");
+                if (data.status === 'success') {
+                    currentUser = { id: data.data.id, name: data.data.full_name, email: data.data.email };
+                    localStorage.setItem('booknest_session', JSON.stringify(currentUser));
+                    alert(data.message || "Welcome back!");
+                    navigate('home');
+                } else {
+                    alert(data.message || "Invalid email or password.");
+                }
+            } catch (e) {
+                console.warn("Backend not reachable. Using local storage fallback.");
+                let users = JSON.parse(localStorage.getItem('booknest_users'));
+                let user = users.find(u => u.email === email.toLowerCase() && u.pass === pass);
+
+                if (user) {
+                    currentUser = { id: user.id, name: user.name, email: user.email };
+                    localStorage.setItem('booknest_session', JSON.stringify(currentUser));
+                    alert("Welcome back (Offline), " + user.name + "!");
+                    navigate('home');
+                } else {
+                    alert("Invalid email or password (Offline).");
+                }
             }
         }
 
-        function logout() {
+        async function logout() {
+            try {
+                await fetch('api/auth.php?action=logout', { method: 'POST' });
+            } catch(e) { /* ignore */ }
+            
             currentUser = null;
             cart = []; // Empty cart on logout for simplicity
             wishlist = []; // Empty wishlist on logout for simplicity
