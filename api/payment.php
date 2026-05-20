@@ -91,6 +91,9 @@ if ($method === 'POST' && $action === 'process') {
         } else {
             $message = 'Invalid UPI ID';
         }
+    } elseif ($paymentMethod === 'cod') {
+        $success = true;
+        $message = 'Cash on Delivery confirmed';
     }
 
     if ($success) {
@@ -98,16 +101,19 @@ if ($method === 'POST' && $action === 'process') {
         $db->beginTransaction();
         try {
         
-            $stmt = $db->prepare('
+            $newPaymentStatus = ($paymentMethod === 'cod') ? 'pending' : 'completed';
+            $paidAtStr = ($paymentMethod === 'cod') ? 'NULL' : 'NOW()';
+            
+            $stmt = $db->prepare("
                 UPDATE orders 
-                SET payment_status = "completed", 
+                SET payment_status = ?, 
                     payment_method = ?, 
                     payment_id = ?, 
-                    paid_at = NOW(),
-                    status = "confirmed"
+                    paid_at = $paidAtStr,
+                    status = 'confirmed'
                 WHERE id = ?
-            ');
-            $stmt->execute([$paymentMethod, $paymentId, $orderId]);
+            ");
+            $stmt->execute([$newPaymentStatus, $paymentMethod, $paymentId, $orderId]);
 
             $decrStock = $db->prepare('UPDATE books SET stock = stock - ? WHERE id = ?');
             foreach ($orderItems as $item) {

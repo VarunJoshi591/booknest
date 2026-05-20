@@ -1069,18 +1069,23 @@ session_start();
                 if (result.data && result.data.length > 0) {
                     let html = '';
                     result.data.forEach(order => {
-                        const statusColor = order.payment_status === 'completed' ? '#27ae60' : 
+                        const paymentStatusColor = order.payment_status === 'completed' ? '#27ae60' : 
                                           order.payment_status === 'failed' ? '#e74c3c' : '#f39c12';
-                        const statusText = order.payment_status === 'completed' ? 'Paid' : 
-                                         order.payment_status === 'failed' ? 'Payment Failed' : 'Payment Pending';
+                        const paymentStatusText = order.payment_status.charAt(0).toUpperCase() + order.payment_status.slice(1);
+                        
+                        const orderStatusColor = order.status === 'delivered' ? '#27ae60' :
+                                                 order.status === 'shipped' ? '#8e44ad' :
+                                                 order.status === 'confirmed' ? '#3498db' :
+                                                 order.status === 'cancelled' ? '#e74c3c' : '#f39c12';
+                        const orderStatusText = order.status.charAt(0).toUpperCase() + order.status.slice(1);
                         
                         html += `
                             <div style="background: white; padding: 20px; margin-bottom: 20px; border-radius: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
                                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
                                     <h3 style="margin: 0; color: #2c3e50; font-weight: 600;">Order #${order.id}</h3>
                                     <div>
-                                        <span style="background: ${statusColor}; color: white; padding: 5px 15px; border-radius: 20px; font-size: 14px; font-weight: 500; margin-right: 10px;">${statusText}</span>
-                                        <span style="background: #3498db; color: white; padding: 5px 15px; border-radius: 20px; font-size: 14px; font-weight: 500;">${order.status}</span>
+                                        <span style="background: ${paymentStatusColor}; color: white; padding: 5px 15px; border-radius: 20px; font-size: 14px; font-weight: 500; margin-right: 10px;">Payment: ${paymentStatusText}</span>
+                                        <span style="background: ${orderStatusColor}; color: white; padding: 5px 15px; border-radius: 20px; font-size: 14px; font-weight: 500;">Order: ${orderStatusText}</span>
                                     </div>
                                 </div>
                                 <p style="color: #7f8c8d; margin: 5px 0;">Placed on: ${new Date(order.placed_at).toLocaleDateString()}</p>
@@ -1217,7 +1222,7 @@ session_start();
                 }
                 
                 paymentData = { card_number: cardNumber, expiry, cvv, name };
-            } else {
+            } else if (currentPaymentMethod === 'upi') {
                 const upiId = document.getElementById('upi-id').value;
                 
                 if (!upiId || !upiId.includes('@')) {
@@ -1226,6 +1231,8 @@ session_start();
                 }
                 
                 paymentData = { upi_id: upiId };
+            } else if (currentPaymentMethod === 'cod') {
+                paymentData = { cod: true };
             }
             
             if (!isValid) {
